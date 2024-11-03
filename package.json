@@ -1,0 +1,15 @@
+{
+  "name": "africanshop-api",
+  "version": "1.0.0",
+  "description": "Back-end for the africanShop",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Henry Amos and Jessica",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
+}
