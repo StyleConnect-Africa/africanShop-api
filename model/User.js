@@ -2,20 +2,31 @@ import mongoose, { Schema,model } from "mongoose";
 import {toJSON}  from  "@reis/mongoose-to-json";
 import  bcrypt from "bcryptjs"
 
-const userSchema = new Schema({
-    name: { type: String, required: true},
-    email: { type: String, required: true, unique: true},
-    password: {type: String, required: true },
-    phoneNo:{ type: String, required: true },
-    avatar : { type: String },
+const userSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phoneNo: { type: String, required: true },
+    avatar: { type: String },
     role: {
-        type: String,
-        default: 'user',
-    enum: [ 'user', 'vendor', ,]
-    }
-},{
+      type: String,
+      default: "user",
+      enum: ["user", "vendor", ,],
+    },
+    // Store-specific fields for vendors
+    storeName: { type: String },
+    storeLocation: { type: String },
+    businessPhoneNo: { type: String },
+    businessEmail: { type: String },
+    storeDescription: { type: String },
+    operatingHours: { type: String }, // e.g., "9 AM - 5 PM"
+    socialMediaLinks: { type: Map, of: String }, // e.g., { facebook: "url", twitter: "url" }
+    storePolicies: { type: String }, //
+  },
+  {
     timestamps: true,
-}
+  }
 );
 
 //Password hashing

@@ -2,7 +2,11 @@
 
 import transporter from '../config/nodemailerConfig.js';
 
-export const sendEmail = async (to, subject, text, html) => {
+export const sendEmail = async (to, subject, text, html = '') => {
+    if (!to) {
+        throw new Error('Recipient email address is required');
+    }
+
     try {
         const info = await transporter.sendMail({
             from: process.env.EMAIL_USER,

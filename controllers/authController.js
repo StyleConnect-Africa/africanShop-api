@@ -17,4 +17,19 @@ const login = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-export { register, login };
+const updateStoreInfo = async (req, res) => {
+  try {
+    const updateData = req.body;
+    const updatedStore = await updateStore(req.user.userId, updateData);
+    res
+      .status(200)
+      .json({
+        message: "Store information updated successfully",
+        updatedStore,
+      });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export { register, login, updateStoreInfo };
