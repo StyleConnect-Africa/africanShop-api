@@ -1,6 +1,6 @@
-import mongoose, { Schema,model } from "mongoose";
-import {toJSON}  from  "@reis/mongoose-to-json";
-import  bcrypt from "bcryptjs"
+import mongoose, { Schema, model } from "mongoose";
+import { toJSON } from "@reis/mongoose-to-json";
+import bcrypt from "bcryptjs";
 
 const userSchema = new Schema(
   {
@@ -12,7 +12,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       default: "user",
-      enum: ["user", "vendor", ,],
+      enum: ["user", "vendor"],
     },
     // Store-specific fields for vendors
     storeName: { type: String },
@@ -30,20 +30,19 @@ const userSchema = new Schema(
 );
 
 //Password hashing
- userSchema.pre('save', async function (next) {
-     if (!this.isModified('password')) return next();
-     const salt = await bcrypt.genSalt(10);
-          this.password = await bcrypt.hash(this.password, salt);
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   next();
- });
+});
 
 // // Method to compare passwords
- userSchema.methods.matchPassword = async function (enteredPassword) {
-     return await bcrypt.compare(enteredPassword, this.password);
- };
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
+userSchema.plugin(toJSON);
 
- userSchema.plugin(toJSON);
-
-const User =mongoose.model('User',userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
