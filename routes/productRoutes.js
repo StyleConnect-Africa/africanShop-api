@@ -25,7 +25,7 @@ router.post(
 router.get("/", getProducts);
 
 // Update a product (only by vendor who owns it)
-router.put("/:id", verifyVendor, updateProduct);
+router.patch("/:id", verifyVendor, updateProduct);
 
 // Delete a product (only by vendor who owns it)
 router.delete("/:id", verifyVendor, deleteProduct);
