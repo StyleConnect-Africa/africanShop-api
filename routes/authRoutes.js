@@ -1,7 +1,9 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import { register,login,updateStoreInfo,updateUserInfo } from "../controllers/authController.js";
-import { validateLogin, validateRegister,validateStoreUpdate,validateUserUpdate } from "../validators/authValidator.js";
+import { uploadProfilePicture } from "../services/authService.js";
+import { profilePictureValidator, validateLogin, validateRegister,validateStoreUpdate,validateUserUpdate } from "../validators/authValidator.js";
+import { productUpload } from "../config/multerConfig.js";
 const router = express.Router();
 
 // Public routes
@@ -18,5 +20,8 @@ router.get("/vendor", authMiddleware(['vendor']), (req, res) => {
     res.status(200).send("This is a protected route accessible only to vendors.");
 });
 router.put("/vendor/store/update", authMiddleware(['vendor']), validateStoreUpdate, updateStoreInfo);
+// Route to upload profile picture
+router.post('/upload-profile-picture', authMiddleware(), productUpload.single('avatar'),uploadProfilePicture,profilePictureValidator);
+
 
 export default router;
