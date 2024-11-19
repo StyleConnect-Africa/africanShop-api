@@ -128,3 +128,12 @@ export const getProductDetails = async (req, res) => {
       });
   }
 };
+
+export const getProductsWithVendorInfo = async (req, res) => {
+  try {
+    const products = await Product.find().populate('vendor', 'storeName');
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
