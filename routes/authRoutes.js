@@ -1,7 +1,7 @@
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import { register,login,updateStoreInfo } from "../controllers/authController.js";
-import { validateLogin, validateRegister,validateStoreUpdate } from "../validators/authValidator.js";
+import { register,login,updateStoreInfo,updateUserInfo } from "../controllers/authController.js";
+import { validateLogin, validateRegister,validateStoreUpdate,validateUserUpdate } from "../validators/authValidator.js";
 const router = express.Router();
 
 // Public routes
@@ -11,6 +11,7 @@ router.post("/login", validateLogin, login); // Public route
 router.get("/user", authMiddleware(['user']), (req, res) => {
     res.status(200).send("This is a protected route accessible only to users.");
 });
+router.put("/user/update", authMiddleware(['user']), validateUserUpdate, updateUserInfo);
 
 // Vendor routes
 router.get("/vendor", authMiddleware(['vendor']), (req, res) => {
