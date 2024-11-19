@@ -53,4 +53,30 @@ const updateStoreInfo = async (req, res) => {
   }
 };
 
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const userId = req.user._id; // Assuming req.user is set by authMiddleware
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.avatar = `/uploads/profile_pictures/${req.file.filename}`;
+    await user.save();
+
+    res
+      .status(200)
+      .json({
+        message: "Profile picture uploaded successfully",
+        avatar: user.avatar,
+      });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 export { register, login, updateStoreInfo, updateUserInfo };

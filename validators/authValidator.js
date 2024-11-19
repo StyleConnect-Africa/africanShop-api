@@ -99,4 +99,15 @@ const validateUserUpdate = (req, res, next) => {
   }
   next();
 };
-export { validateLogin, validateRegister, validateStoreUpdate, validateUserUpdate };
+ const profilePictureValidator = (req, res, next) => {
+  const userRole = req.user.role; // Assuming req.user is set by authMiddleware
+
+  if (userRole === "vendor" && !req.file) {
+    return res
+      .status(400)
+      .json({ message: "Profile picture is required for vendors." });
+  }
+
+  next();
+};
+export { validateLogin, validateRegister, validateStoreUpdate, validateUserUpdate,profilePictureValidator };
