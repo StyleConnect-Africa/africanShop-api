@@ -14,7 +14,7 @@ const registerUser = async ({ name, email, password, phoneNo, role, storeName, b
       console.log('Attempting to send email to:', businessEmail);
 
       if (businessEmail) {
-        await sendEmail(businessEmail, "Store Registration Successful", `Hello ${name}, your store "${storeName}" has been successfully registered.`);
+        await sendEmail(businessEmail, "Registration Successful", `Hello ${name}, your store "${storeName}" has been successfully registered.`);
       } else {
         console.error("No business email provided for sending registration email.");
       }
@@ -77,5 +77,26 @@ const loginUser = async ({ email, password }) => {
     }
   }
 };
+const updateUser = async (userId, updates) => {
+  try {
+    const user = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+      runValidators: true,
+    });
 
-export { registerUser, loginUser };
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      throw new Error(`Validation error: ${messages.join(", ")}`);
+    } else {
+      throw new Error(`Update failed: ${error.message}`);
+    }
+  }
+};
+
+export { registerUser, loginUser,updateUser };

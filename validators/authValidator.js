@@ -19,6 +19,10 @@ const validateRegister =(req,rest,next)=>{
         is: "vendor",
         then: Joi.required(),
       }),
+      storeName: Joi.string().when("role", {
+        is: "vendor",
+        then: Joi.required(),
+      }),
     });
     const {error}=schema.validate(req.body);
     if(error) return rest.status(400).json({
@@ -78,4 +82,21 @@ const validateStoreUpdate = [
     next();
   },
 ];
-export { validateLogin, validateRegister, validateStoreUpdate };
+const validateUserUpdate = (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().optional(),
+    email: Joi.string().email().optional(),
+    phoneNo: Joi.string().optional(),
+    // Add other fields as necessary
+  });
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return res.status(400).json({
+      message: "Validation error",
+      details: error.details.map((detail) => detail.message),
+    });
+  }
+  next();
+};
+export { validateLogin, validateRegister, validateStoreUpdate, validateUserUpdate };

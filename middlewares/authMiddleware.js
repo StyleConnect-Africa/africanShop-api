@@ -5,12 +5,12 @@ const authMiddleware = (roles = []) => {
     if (typeof roles === "string") roles = [roles];
     return (req, res, next) => {
       const token = req.header("Authorization")?.replace("Bearer ", "");
-      if (!token) return res.status(401).send("Access Denied");
+      if (!token) return res.status(401).json({ message: "Access Denied: No token provided" });
 
       try {
         const decoded = jsonwebtoken.verify(token, process.env.JWT_SECRET);
         console.log("Decoded token:", decoded);
-        req.user = decoded;
+        req.user = { _id: decoded.userId, role: decoded.role };
 
         // Check if the user has one of the required roles
         if (roles.length && !roles.includes(decoded.role)) {
