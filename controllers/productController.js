@@ -20,12 +20,17 @@ import Product from "../model/Product.js";
      }
    };
 // Get Products with Filtering
-export const getProducts = async (req, res) => {
+export const getProducts = async (req, res,next) => {
   try {
-    const filters = req.query; // Example: category, price range
-    const products = await Product.find(filters);
+    const { filter = "{}", limit = 15, skip = 0 } = req.query;
+    
+    const products = await Product
+           .find(JSON.parse(filter))
+           .limit(limit)
+           .skip(skip)
     res.status(200).json(products);
   } catch (error) {
+    next(error);
     res.status(400).json({ message: error.message });
   }
 };
