@@ -24,10 +24,10 @@ export const getProducts = async (req, res,next) => {
   try {
     const { filter = "{}", limit = 15, skip = 0 } = req.query;
     
-    const products = await Product
-           .find(JSON.parse(filter))
-           .limit(limit)
-           .skip(skip)
+    const products = await Product.find(JSON.parse(filter))
+      .sort({ createdAt: -1 }) // Sort by creation date, newest first
+      .limit(limit)
+      .skip(skip);
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -96,10 +96,10 @@ export const listProducts = async (req, res) => {
       filter.vendor = vendor; // Filter by vendor if specified
     }
 
-    const products = await Product.find(filter).populate(
-      "vendor",
-      "name email"
-    );
+    const products = await Product.find(filter)
+           .populate("vendor", "name email storeName",)
+           .sort({ createdAt: -1 }); // Sort by creation date, newest first
+
 
     return res.status(200).json(products);
   } catch (error) {
